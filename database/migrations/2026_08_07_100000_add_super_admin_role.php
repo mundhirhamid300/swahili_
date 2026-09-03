@@ -10,6 +10,9 @@ return new class extends Migration
     {
         if (Schema::getConnection()->getDriverName() === 'mysql') {
             DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin','admin','student') NOT NULL DEFAULT 'student'");
+        } elseif (Schema::getConnection()->getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check');
+            DB::statement("ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('super_admin', 'admin', 'student'))");
         }
 
         if (! DB::table('users')->where('role', 'super_admin')->exists()) {
@@ -30,6 +33,9 @@ return new class extends Migration
         DB::table('users')->where('role', 'super_admin')->update(['role' => 'admin']);
         if (Schema::getConnection()->getDriverName() === 'mysql') {
             DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin','student') NOT NULL DEFAULT 'student'");
+        } elseif (Schema::getConnection()->getDriverName() === 'pgsql') {
+            DB::statement('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check');
+            DB::statement("ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('admin', 'student'))");
         }
     }
 };
