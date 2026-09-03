@@ -3,7 +3,7 @@ FROM php:8.3-apache
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends git libfreetype6-dev libjpeg62-turbo-dev libpng-dev libpq-dev libzip-dev unzip \
+    && apt-get install -y --no-install-recommends git libfreetype6-dev libjpeg62-turbo-dev libonig-dev libpng-dev libpq-dev libzip-dev unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j"$(nproc)" bcmath gd mbstring pdo_pgsql zip \
     && a2enmod rewrite \
