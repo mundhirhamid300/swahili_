@@ -20,6 +20,7 @@ COPY . .
 
 RUN composer dump-autoload --no-dev --classmap-authoritative --no-interaction \
     && php artisan package:discover --ansi \
+    && mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/testing storage/framework/views storage/logs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && sed -ri "s!/var/www/html!/var/www/html/public!g" /etc/apache2/sites-available/000-default.conf
 
