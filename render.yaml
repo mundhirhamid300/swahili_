@@ -26,7 +26,7 @@ services:
           name: swahili-learning-db
           property: connectionString
       - key: SESSION_DRIVER
-        value: database
+        value: file
       - key: CACHE_STORE
         value: database
       - key: QUEUE_CONNECTION
