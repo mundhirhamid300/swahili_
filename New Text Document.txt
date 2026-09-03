@@ -1,0 +1,16 @@
+$env:Path = "C:\xampp\php;C:\ProgramData\ComposerSetup\bin;$env:Path"
+
+composer install
+npm.cmd install
+npm.cmd run build
+php artisan storage:link
+php artisan optimize:clear
+
+
+
+php artisan migrate
+
+
+php artisan serve --host=127.0.0.1 --port=8001
+
+.\run-project.bat

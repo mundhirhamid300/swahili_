@@ -1,0 +1,24 @@
+<?php
+
+/** Hii middleware hukagua ombi kabla halijafika kwenye controller. */
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class EnsurePasswordIsChanged
+{
+    public function handle(Request $request, Closure $next): Response
+    {
+        if ($request->user()?->must_change_password
+            && ! $request->routeIs('password.force.*')
+            && ! $request->routeIs('logout')) {
+            return redirect()->route('password.force.form')
+                ->with('warning', 'Create a new private password before continuing.');
+        }
+
+        return $next($request);
+    }
+}

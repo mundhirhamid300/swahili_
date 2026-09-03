@@ -1,0 +1,730 @@
+/* Swahili LMS overrides on top of Dreams POS template */
+
+/* Instant loader hide — no artificial delay */
+#global-loader.lms-loader,
+#global-loader.is-hidden {
+    display: none !important;
+}
+
+.chatbot-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #FE9F43;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 20px rgba(254, 159, 67, 0.45);
+    z-index: 1000;
+    text-decoration: none;
+    transition: transform 0.2s;
+}
+
+.chatbot-fab:hover {
+    transform: scale(1.08);
+    color: #fff;
+}
+
+.flashcard-study {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 420px;
+    height: 260px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flashcard-study.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.flashcard-front {
+    background: linear-gradient(135deg, #FE9F43 0%, #FF6B35 100%);
+    color: #fff;
+}
+
+.flashcard-back {
+    background: #fff;
+    transform: rotateY(180deg);
+    border: 2px solid #FE9F43;
+}
+
+.translator-box .mic-btn.listening {
+    animation: lms-pulse 1.5s infinite;
+    background: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+@keyframes lms-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5); }
+    70% { box-shadow: 0 0 0 15px rgba(220, 53, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+
+.certificate-card {
+    border: 2px solid #FE9F43;
+    border-radius: 12px;
+    padding: 3rem;
+    background: #fff;
+    text-align: center;
+}
+
+/* Dreams POS auth split — fit form fully in the browser viewport */
+.account-page,
+.account-page .main-wrapper,
+.account-page .account-content {
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: auto;
+    overflow: visible;
+}
+
+.lms-auth-split.login-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    position: relative;
+    justify-content: center;
+    background-color: #092c4c;
+    background-image: linear-gradient(90deg, rgba(9, 44, 76, 0.05) 35%, rgba(9, 44, 76, 0.34) 100%), var(--lms-auth-background);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.lms-auth-split .login-img {
+    display: none;
+}
+
+.lms-auth-split .login-img img {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    object-position: center;
+    padding: 0;
+}
+
+.lms-auth-split .lms-login-panel.login-content.user-login {
+    flex: 0 0 50%;
+    max-width: 50%;
+    width: 50% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 1.25rem 1.5rem !important;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    background: transparent;
+}
+
+.lms-auth-split .login-userset {
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    padding: 1.25rem 1.35rem !important;
+    max-height: calc(100dvh - 2.5rem);
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 14px;
+    box-shadow: 0 18px 55px rgba(9, 44, 76, 0.28);
+    backdrop-filter: blur(8px);
+}
+
+.lms-auth-split .login-logo,
+.lms-auth-split .login-logo.login-info {
+    max-width: 110px;
+    margin: 0 auto 0.5rem;
+}
+
+.lms-auth-split .login-logo img {
+    margin-bottom: 0 !important;
+    max-height: 42px;
+    width: auto;
+}
+
+.lms-auth-split .login-userheading {
+    margin: 0 0 0.85rem !important;
+}
+
+.lms-auth-split .login-userheading h3 {
+    font-size: 1.35rem !important;
+    margin: 0 0 0.25rem !important;
+}
+
+.lms-auth-split .login-userheading h4 {
+    font-size: 0.85rem !important;
+    margin: 0 !important;
+    line-height: 1.35;
+}
+
+.lms-auth-split .login-content form,
+.lms-auth-split .lms-login-panel form {
+    width: 100% !important;
+    margin: 0;
+}
+
+.lms-auth-split .form-login {
+    margin-bottom: 0.7rem !important;
+}
+
+.lms-auth-split .form-login label {
+    margin-bottom: 0.35rem !important;
+    font-size: 0.875rem !important;
+}
+
+.lms-auth-split .form-login input,
+.lms-auth-split .auth-select {
+    width: 100%;
+    height: 40px;
+}
+
+.lms-auth-split .form-login .btn-login {
+    width: 100%;
+    margin-top: 0.15rem;
+    padding: 0.65rem 1rem;
+}
+
+.lms-auth-split .form-login .btn-login,
+.lms-auth-split .pass-group,
+.lms-auth-split .form-addons {
+    width: 100%;
+}
+
+.lms-auth-split .signinform {
+    margin: 0.65rem 0 0.5rem !important;
+}
+
+.lms-auth-split .signinform h4 {
+    font-size: 0.85rem !important;
+    margin: 0;
+}
+
+.lms-auth-split .form-setlogin {
+    margin-bottom: 0.65rem !important;
+}
+
+.lms-auth-split .form-setlogin h4 {
+    font-size: 0.8rem !important;
+}
+
+.lms-auth-split .form-setlogin h4:before,
+.lms-auth-split .form-setlogin h4:after {
+    width: 18px !important;
+}
+
+.lms-auth-split .form-sociallink {
+    margin-top: 0 !important;
+}
+
+.lms-auth-split .form-sociallink ul,
+.lms-auth-split .form-sociallink ul li {
+    width: 100%;
+    margin: 0;
+}
+
+.lms-auth-split .form-sociallink ul li a {
+    margin: 0;
+    padding: 0.65rem 1rem;
+    width: 100%;
+}
+
+.lms-auth-split .form-login input.is-invalid,
+.lms-auth-split .auth-select.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+.auth-field-error {
+    display: block;
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.password-strength-hint {
+    font-size: 11px;
+    color: #646B72;
+    margin-top: 6px;
+    line-height: 1.35;
+}
+
+.password-strength-bar {
+    height: 6px;
+    border-radius: 999px;
+    background: #E8ECF0;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.password-strength-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: inherit;
+    transition: width 0.2s ease, background-color 0.2s ease;
+}
+
+.password-strength-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.password-strength.is-weak .password-strength-fill {
+    background: #dc3545;
+}
+
+.password-strength.is-weak .password-strength-label {
+    color: #dc3545;
+}
+
+.password-strength.is-strong .password-strength-fill {
+    background: #159F46;
+}
+
+.password-strength.is-strong .password-strength-label {
+    color: #159F46;
+}
+
+.password-match-hint {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.password-match-hint.is-match {
+    color: #159F46;
+}
+
+.password-match-hint.is-mismatch {
+    color: #dc3545;
+}
+
+.lms-auth-split.lms-auth-dense .password-strength-hint {
+    font-size: 10px;
+}
+
+.lms-auth-split.lms-auth-dense .password-strength-label,
+.lms-auth-split.lms-auth-dense .password-match-hint {
+    font-size: 11px;
+}
+
+.auth-select {
+    width: 100%;
+    height: 40px;
+    border: 1px solid rgba(145, 158, 171, 0.32);
+    border-radius: 5px;
+    padding: 0 15px;
+    background: #fff;
+    color: #092C4C;
+}
+
+.auth-select:focus {
+    border-color: #FE9F43;
+    outline: none;
+}
+
+.lms-social-disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Register / denser auth forms — same viewport fit as login */
+.lms-auth-split.lms-auth-dense .login-userset {
+    max-width: 420px;
+    padding: 1rem 1.2rem !important;
+}
+
+.lms-auth-split.lms-auth-dense .login-logo,
+.lms-auth-split.lms-auth-dense .login-logo.login-info {
+    max-width: 96px;
+    margin-bottom: 0.35rem;
+}
+
+.lms-auth-split.lms-auth-dense .login-logo img {
+    max-height: 36px;
+}
+
+.lms-auth-split.lms-auth-dense .login-userheading {
+    margin-bottom: 0.65rem !important;
+}
+
+.lms-auth-split.lms-auth-dense .login-userheading h3 {
+    font-size: 1.25rem !important;
+}
+
+.lms-auth-split.lms-auth-dense .login-userheading h4 {
+    font-size: 0.8rem !important;
+}
+
+.lms-auth-split.lms-auth-dense .form-login {
+    margin-bottom: 0.5rem !important;
+}
+
+.lms-auth-split.lms-auth-dense .form-login label {
+    margin-bottom: 0.25rem !important;
+    font-size: 0.8rem !important;
+}
+
+.lms-auth-split.lms-auth-dense .form-login input,
+.lms-auth-split.lms-auth-dense .auth-select {
+    height: 36px;
+    font-size: 0.875rem;
+}
+
+.lms-auth-split.lms-auth-dense .form-login .btn-login {
+    padding: 0.55rem 1rem;
+    margin-top: 0.1rem;
+}
+
+.lms-auth-split.lms-auth-dense .signinform {
+    margin: 0.5rem 0 0 !important;
+}
+
+.lms-auth-split.lms-auth-dense .row.g-2 > [class*="col-"] .form-addons,
+.lms-auth-split.lms-auth-dense .row.g-2 > [class*="col-"] .pass-group {
+    width: 100%;
+}
+
+.lms-auth-split.lms-auth-dense .auth-field-error {
+    font-size: 11px;
+    margin-top: 2px;
+    line-height: 1.25;
+}
+
+@media (max-height: 760px) {
+    .lms-auth-split .login-userset {
+        padding: 1rem 1.15rem !important;
+    }
+
+    .lms-auth-split .login-logo img {
+        max-height: 34px;
+    }
+
+    .lms-auth-split .login-userheading h3 {
+        font-size: 1.2rem !important;
+    }
+
+    .lms-auth-split .form-login {
+        margin-bottom: 0.5rem !important;
+    }
+
+    .lms-auth-split .form-login input,
+    .lms-auth-split .auth-select {
+        height: 36px;
+    }
+
+    .lms-auth-split.lms-auth-dense .login-userset {
+        padding: 0.85rem 1rem !important;
+    }
+
+    .lms-auth-split.lms-auth-dense .login-logo img {
+        max-height: 30px;
+    }
+
+    .lms-auth-split.lms-auth-dense .form-login {
+        margin-bottom: 0.4rem !important;
+    }
+
+    .lms-auth-split.lms-auth-dense .form-login input,
+    .lms-auth-split.lms-auth-dense .auth-select {
+        height: 34px;
+    }
+}
+
+@media (max-height: 680px) {
+    .lms-auth-split.lms-auth-dense .lms-login-panel.login-content.user-login {
+        align-items: flex-start;
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+    }
+
+    .lms-auth-split.lms-auth-dense .login-userset {
+        max-height: calc(100dvh - 1.5rem);
+    }
+}
+
+@media (max-width: 991.98px) {
+    .lms-auth-split.login-wrapper {
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow: hidden;
+        background-position: 38% center;
+    }
+
+    .lms-auth-split .login-img {
+        display: none;
+    }
+
+    .lms-auth-split .lms-login-panel.login-content.user-login {
+        flex: 0 0 100%;
+        max-width: 100%;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100vh;
+        min-height: 100dvh;
+        padding: 1.25rem 1rem !important;
+        background: rgba(9, 44, 76, 0.18);
+    }
+
+    .lms-auth-split .login-userset {
+        max-width: 420px;
+        max-height: none;
+    }
+}
+
+.lms-hero {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: linear-gradient(135deg, #092C4C 0%, #1B4F72 50%, #FE9F43 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+.lms-hero-bleed {
+    position: relative;
+    overflow: hidden;
+    background-color: #092C4C;
+    background-image: var(--lms-hero-image), linear-gradient(135deg, #092C4C 0%, #1B4F72 55%, #FE9F43 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    align-items: flex-end;
+    padding: 0;
+}
+
+.lms-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(9, 44, 76, 0.35) 0%, rgba(9, 44, 76, 0.55) 45%, rgba(9, 44, 76, 0.88) 100%);
+    pointer-events: none;
+}
+
+.lms-hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 4.5rem 1rem 3.5rem;
+    max-width: 720px;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.lms-hero-brand {
+    display: block;
+    max-height: 56px;
+    width: auto;
+    margin-bottom: 1.25rem;
+}
+
+.lms-hero-title {
+    font-size: clamp(2rem, 4vw, 3.15rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 0.85rem;
+    letter-spacing: -0.02em;
+}
+
+.lms-hero-lead {
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    opacity: 0.9;
+    max-width: 34rem;
+    margin: 0 0 1.5rem;
+    line-height: 1.5;
+}
+
+.lms-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.lms-home-features {
+    background: #fff;
+    padding: 3rem 0;
+    color: #092C4C;
+}
+
+@media (max-width: 767.98px) {
+    .lms-hero-bleed {
+        align-items: center;
+        text-align: center;
+    }
+
+    .lms-hero-content {
+        padding: 3.5rem 1rem;
+        margin: 0 auto;
+    }
+
+    .lms-hero-brand {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .lms-hero-lead {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .lms-hero-actions {
+        justify-content: center;
+    }
+}
+
+.course-card-placeholder {
+    height: 160px;
+    background: linear-gradient(135deg, #092C4C, #FE9F43);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 3rem;
+}
+
+.table .btn + .btn,
+.table form + .btn,
+.table .btn + form {
+    margin-left: 0.25rem;
+}
+
+.chat-panel .badge {
+    font-size: 0.7rem;
+}
+
+.bg-primary-transparent {
+    background: rgba(254, 159, 67, 0.15);
+}
+
+/* Brand logo sizing */
+.header .logo img,
+.sidebar-logo .logo img,
+.login-logo img {
+    max-height: 42px;
+    width: auto;
+}
+
+.sidebar-logo .logo-small img,
+.header .logo-small img {
+    max-height: 36px;
+    width: auto;
+}
+
+.lms-hero img[alt="Swahili LMS"],
+.lms-hero-brand {
+    max-height: 56px;
+    width: auto;
+}
+
+/* Quiz — larger tap targets */
+.quiz-option-btn {
+    padding: 0.85rem 1rem;
+    white-space: normal;
+    line-height: 1.35;
+    border-width: 2px;
+}
+
+.quiz-option .btn-check:checked + .quiz-option-btn {
+    background-color: rgba(254, 159, 67, 0.15);
+    border-color: #FE9F43;
+    color: #092C4C;
+    font-weight: 600;
+}
+
+.quiz-start-btn {
+    min-height: 48px;
+}
+
+/* Sticky Continue (mobile) */
+.sticky-continue-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 1020;
+    padding: 0.75rem 0.5rem calc(0.75rem + env(safe-area-inset-bottom, 0));
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95) 28%);
+    margin-top: 1rem;
+}
+
+.todays-plan .plan-step ul {
+    max-height: 9rem;
+    overflow: auto;
+}
+
+@media (max-width: 767.98px) {
+    .ai-practice-tabs {
+        flex-direction: column;
+    }
+
+    .ai-practice-tabs .btn {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        text-align: left;
+        font-size: 1rem;
+    }
+
+    .quiz-option-btn {
+        padding: 1rem 1.1rem;
+        font-size: 1.05rem;
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+    }
+
+    .quiz-active-form .btn-lg,
+    .quiz-start-btn {
+        min-height: 52px;
+        font-size: 1.05rem;
+    }
+
+    .page-header .btn {
+        min-height: 44px;
+    }
+
+    .todays-plan .card-header .btn {
+        width: 100%;
+    }
+}
+.mwalimu-chat-fab{position:fixed;right:24px;bottom:24px;z-index:1040;display:flex;align-items:center;gap:10px;padding:9px 15px 9px 9px;border-radius:999px;background:#ff8b38;color:#fff!important;box-shadow:0 14px 35px rgba(9,47,82,.28);text-decoration:none;transition:transform .2s ease,box-shadow .2s ease}
+.mwalimu-chat-fab:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(9,47,82,.34)}
+.mwalimu-chat-fab-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#0b3b61;font-size:21px}
+.mwalimu-chat-fab-label{font-weight:700;white-space:nowrap}
+@media(max-width:575px){.mwalimu-chat-fab{right:16px;bottom:16px;padding:7px}.mwalimu-chat-fab-icon{width:46px;height:46px}.mwalimu-chat-fab-label{display:none}}
