@@ -8,6 +8,7 @@ use App\Http\Requests\StoreCourseRequest;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Services\LevelEnrollmentService;
+use App\Services\CloudinaryAudioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -118,7 +119,11 @@ class CourseController extends Controller
         foreach ($course->lessons as $lesson) {
             foreach ($lesson->flashcards as $word) {
                 if ($word->audio_path) {
-                    Storage::disk('public')->delete($word->audio_path);
+                    if ($word->audio_public_id) {
+                        app(CloudinaryAudioService::class)->delete($word->audio_public_id);
+                    } elseif (! str_starts_with($word->audio_path, 'http')) {
+                        Storage::disk('public')->delete($word->audio_path);
+                    }
                 }
             }
         }

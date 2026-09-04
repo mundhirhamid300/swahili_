@@ -20,6 +20,7 @@ class Flashcard extends Model
         'english_meaning', // Tafsiri au maana ya Kiingereza.
         'pronunciation', // Mwongozo wa matamshi.
         'audio_path', // Njia ya faili la sauti.
+        'audio_public_id', // Kitambulisho cha sauti kwenye Cloudinary.
     ];
 
     /** Rudisha somo ambalo flashcard hii ni sehemu yake. */

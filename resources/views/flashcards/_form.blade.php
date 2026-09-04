@@ -29,7 +29,7 @@
         controls
         class="w-100 {{ isset($flashcard) && $flashcard->audio_path ? '' : 'd-none' }}"
         @isset($flashcard)
-            @if($flashcard->audio_path) src="{{ asset('storage/'.$flashcard->audio_path) }}" @endif
+            @if($flashcard->audio_path) src="{{ str_starts_with($flashcard->audio_path, 'http') ? $flashcard->audio_path : asset('storage/'.$flashcard->audio_path) }}" @endif
         @endisset
     ></audio>
 </div>

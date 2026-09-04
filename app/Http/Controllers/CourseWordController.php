@@ -8,6 +8,7 @@ use App\Http\Requests\StoreFlashcardRequest;
 use App\Models\Course;
 use App\Models\Flashcard;
 use App\Models\Lesson;
+use App\Services\CloudinaryAudioService;
 use Illuminate\Support\Facades\Storage;
 
 class CourseWordController extends Controller
@@ -24,7 +25,9 @@ class CourseWordController extends Controller
     {
         $lesson = $this->contentLesson($course);
         $data = $request->validated();
-        $data['audio_path'] = $request->file('audio')->store('course-words/audio', 'public');
+        $audio = app(CloudinaryAudioService::class)->upload($request->file('audio'));
+        $data['audio_path'] = $audio['url'];
+        $data['audio_public_id'] = $audio['public_id'];
         unset($data['audio']);
         $lesson->flashcards()->create($data);
 
@@ -45,8 +48,10 @@ class CourseWordController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('audio')) {
-            if ($word->audio_path) Storage::disk('public')->delete($word->audio_path);
-            $data['audio_path'] = $request->file('audio')->store('course-words/audio', 'public');
+            $audio = app(CloudinaryAudioService::class)->upload($request->file('audio'));
+            $this->deleteAudio($word);
+            $data['audio_path'] = $audio['url'];
+            $data['audio_public_id'] = $audio['public_id'];
         }
 
         unset($data['audio']);
@@ -58,7 +63,7 @@ class CourseWordController extends Controller
     public function destroy(Course $course, Flashcard $word)
     {
         $this->ensureWordBelongsToCourse($course, $word);
-        if ($word->audio_path) Storage::disk('public')->delete($word->audio_path);
+        $this->deleteAudio($word);
         $word->delete();
 
         return back()->with('success', 'Word and its audio were deleted.');
@@ -75,5 +80,14 @@ class CourseWordController extends Controller
     private function ensureWordBelongsToCourse(Course $course, Flashcard $word): void
     {
         abort_unless($word->lesson?->course_id === $course->id, 404);
+    }
+
+    private function deleteAudio(Flashcard $word): void
+    {
+        if ($word->audio_public_id) {
+            app(CloudinaryAudioService::class)->delete($word->audio_public_id);
+        } elseif ($word->audio_path && ! str_starts_with($word->audio_path, 'http')) {
+            Storage::disk('public')->delete($word->audio_path);
+        }
     }
 }
