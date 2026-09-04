@@ -41,7 +41,7 @@ class OtpService
             report($exception);
 
             throw ValidationException::withMessages([
-                'email' => 'We could not send the security code. Please try again later or contact the administrator.',
+                'email' => $this->deliveryErrorMessage($exception),
             ]);
         }
     }
@@ -87,6 +87,17 @@ class OtpService
         }
 
         Log::error('Brevo OTP API request failed', ['status' => $response->status(), 'body' => $response->json() ?? $response->body()]);
-        throw new \RuntimeException('Brevo could not send the OTP.');
+        throw new \RuntimeException('Brevo could not send the OTP.', $response->status());
+    }
+
+    private function deliveryErrorMessage(\Throwable $exception): string
+    {
+        return match ($exception->getCode()) {
+            400 => 'Brevo rejected the sender email. Verify MAIL_FROM_ADDRESS in Brevo, then try again.',
+            401, 403 => 'Brevo API key was rejected. Update BREVO_API_KEY in Render.',
+            402 => 'Brevo email credits are unavailable. Check your Brevo plan.',
+            429 => 'Too many email requests. Please wait a few minutes and try again.',
+            default => 'We could not send the security code. Please try again later or contact the administrator.',
+        };
     }
 }
