@@ -28,15 +28,23 @@ services:
       - key: SESSION_DRIVER
         value: file
       - key: CACHE_STORE
-        value: database
+        value: file
       - key: QUEUE_CONNECTION
         value: sync
       - key: OPENAI_API_KEY
         sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: OPENAI_BASE_URL
+        value: https://api.openai.com/v1
+      - key: OPENAI_TIMEOUT
+        value: "30"
       - key: ELEVENLABS_API_KEY
         sync: false
       - key: MAIL_MAILER
         sync: false
+      - key: MAIL_SCHEME
+        value: "null"
       - key: MAIL_HOST
         sync: false
       - key: MAIL_PORT
