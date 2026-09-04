@@ -29,9 +29,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:register');
-    Route::get('/register/otp', [AuthController::class, 'showRegistrationOtp'])->name('register.otp');
-    Route::post('/register/otp', [AuthController::class, 'verifyRegistrationOtp'])->name('register.otp.verify')->middleware('throttle:10,1');
-    Route::post('/register/otp/resend', [AuthController::class, 'resendRegistrationOtp'])->name('register.otp.resend')->middleware('throttle:3,5');
     Route::get('/forgot-password', [PasswordResetController::class, 'requestForm'])->name('password.request');
     Route::post('/forgot-password', [PasswordResetController::class, 'sendOtp'])->name('password.email')->middleware('throttle:3,5');
     Route::get('/forgot-password/otp', [PasswordResetController::class, 'otpForm'])->name('password.otp');

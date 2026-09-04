@@ -80,57 +80,22 @@ class AuthController extends Controller
             'learning_level' => ['nullable', 'in:beginner,intermediate'],
         ]);
 
-        $request->session()->put('pending_registration', [
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => $data['password'],
             'country' => $data['country'],
             'learning_level' => $data['learning_level'] ?? 'beginner',
+            'role' => 'student',
+            'status' => 'active',
         ]);
-
-        $this->otpService->send('registration', $data['email']);
-
-        return redirect()->route('register.otp')->with('status', 'We sent a 6-digit OTP to '.$data['email'].'.');
-    }
-
-    public function showRegistrationOtp(Request $request)
-    {
-        abort_unless($request->session()->has('pending_registration'), 419);
-
-        return view('auth.verify-otp', [
-            'email' => $request->session()->get('pending_registration.email'),
-            'purpose' => 'registration',
-        ]);
-    }
-
-    public function verifyRegistrationOtp(Request $request)
-    {
-        $data = $request->validate(['otp' => ['required', 'digits:6']]);
-        $pending = $request->session()->get('pending_registration');
-        abort_unless($pending, 419);
-
-        if (! $this->otpService->verify('registration', $pending['email'], $data['otp'])) {
-            return back()->withErrors(['otp' => 'Invalid or expired OTP.']);
-        }
-
-        $user = User::create($pending + ['role' => 'student', 'status' => 'active', 'email_verified_at' => now()]);
 
         $this->levelEnrollmentService->enroll($user, $user->learning_level);
-        $request->session()->forget('pending_registration');
         Auth::login($user);
         $request->session()->regenerate();
 
         return redirect()->route('student.dashboard')
             ->with('success', 'Account created successfully. Welcome to Swahili Learning!');
-    }
-
-    public function resendRegistrationOtp(Request $request)
-    {
-        $email = $request->session()->get('pending_registration.email');
-        abort_unless($email, 419);
-        $this->otpService->send('registration', $email);
-
-        return back()->with('status', 'A new OTP was sent.');
     }
 
     public function logout(Request $request)

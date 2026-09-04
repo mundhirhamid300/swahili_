@@ -87,7 +87,7 @@
 
         <div class="form-login">
             <button type="submit" class="btn btn-login">Create Account</button>
-            <p class="text-muted mt-2 mb-0" style="font-size:12px;">We will email you a 6-digit OTP to verify your account.</p>
+            <p class="text-muted mt-2 mb-0" style="font-size:12px;">Create your account and start learning immediately.</p>
         </div>
     </form>
 
