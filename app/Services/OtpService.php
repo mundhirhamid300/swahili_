@@ -7,9 +7,10 @@ namespace App\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class OtpService
 {
@@ -28,10 +29,14 @@ class OtpService
         ], now()->addMinutes(10));
 
         try {
-            Mail::raw("Your Swahili Learning verification code is: {$otp}\n\nThis code expires in 10 minutes. Never share it with anyone.", function ($message) use ($email, $purpose) {
-                $message->to($email)->subject('Swahili Learning '.ucfirst($purpose).' OTP');
-            });
-        } catch (TransportExceptionInterface $exception) {
+            if (filled(config('services.brevo.key'))) {
+                $this->sendThroughBrevoApi($email, $purpose, $otp);
+            } else {
+                Mail::raw("Your Swahili Learning verification code is: {$otp}\n\nThis code expires in 10 minutes. Never share it with anyone.", function ($message) use ($email, $purpose) {
+                    $message->to($email)->subject('Swahili Learning '.ucfirst($purpose).' OTP');
+                });
+            }
+        } catch (\Throwable $exception) {
             Cache::forget($this->key($purpose, $email));
             report($exception);
 
@@ -60,5 +65,28 @@ class OtpService
     private function key(string $purpose, string $email): string
     {
         return 'otp:'.$purpose.':'.hash('sha256', strtolower($email));
+    }
+
+    private function sendThroughBrevoApi(string $email, string $purpose, string $otp): void
+    {
+        $response = Http::acceptJson()
+            ->timeout(20)
+            ->withHeaders(['api-key' => config('services.brevo.key')])
+            ->post('https://api.brevo.com/v3/smtp/email', [
+                'sender' => [
+                    'name' => config('mail.from.name'),
+                    'email' => config('mail.from.address'),
+                ],
+                'to' => [['email' => $email]],
+                'subject' => 'Swahili Learning '.ucfirst($purpose).' OTP',
+                'textContent' => "Your Swahili Learning verification code is: {$otp}\n\nThis code expires in 10 minutes. Never share it with anyone.",
+            ]);
+
+        if ($response->successful()) {
+            return;
+        }
+
+        Log::warning('Brevo OTP API request failed', ['status' => $response->status(), 'body' => $response->json() ?? $response->body()]);
+        throw new \RuntimeException('Brevo could not send the OTP.');
     }
 }
