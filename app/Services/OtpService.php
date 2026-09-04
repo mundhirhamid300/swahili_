@@ -86,7 +86,7 @@ class OtpService
             return;
         }
 
-        Log::warning('Brevo OTP API request failed', ['status' => $response->status(), 'body' => $response->json() ?? $response->body()]);
+        Log::error('Brevo OTP API request failed', ['status' => $response->status(), 'body' => $response->json() ?? $response->body()]);
         throw new \RuntimeException('Brevo could not send the OTP.');
     }
 }
